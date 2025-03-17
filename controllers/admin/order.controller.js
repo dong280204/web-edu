@@ -11,6 +11,8 @@ module.exports.index= async(req, res) => {
             item1.userInfor=userInfor
             for(const item2 of item1.product){
                 const productInfo = await Product.findOne({_id: item2.product_id});
+                productInfo.priceNew=(productInfo.price*(100-productInfo.discountPercentage)/100).toFixed(0)
+                item2.totalPrice=item2.quantity*productInfo.priceNew;
                 item2.productInfo=productInfo
             }
         }
@@ -18,7 +20,7 @@ module.exports.index= async(req, res) => {
     // for(const item1 of cart){
     //     console.log(item1.userInfor.fullName)
     //     for(const item2 of item1.product){
-    //         console.log(item2.productInfo.title)
+    //         console.log(item2.productInfo.title,item2.quantity,item2.totalPrice)
     //     }
     // }
     res.render('admin/pages/order/index',{
