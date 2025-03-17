@@ -1,0 +1,88 @@
+extends ../../layouts/default.pug 
+
+block main
+    .container.py-4
+        //- align-items-center : căn giữa theo chiều dọc
+        //- mb-4 : margin bottom 4
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h1.text-primary.mb-0
+                i.fas.fa-box-open.me-2
+                | Chi tiết sản phẩm
+            a.btn.btn-outline-primary(href="/admin/products")
+                i.fas.fa-arrow-left.me-2
+                | Quay lại
+
+        .card.shadow
+            .card-header.bg-white.py-3
+                .d-flex.justify-content-between.align-items-center
+                    h5.mb-0 #{product.title}
+            .card-body
+                .row
+                    .col-md-5
+                        .product-image.text-center.mb-4
+                            if product.thumbnail
+                                //- img-fluid : ảnh đầy đủ chiều rộng
+                                //- rounded : bo tròn
+                                //- shadow-sm : hiệu ứng bóng
+                                img.img-fluid.rounded.shadow-sm(
+                                    src=product.thumbnail
+                                    alt=product.title
+                                    style="max-height: 400px; object-fit: contain;"
+                                )
+                            else
+                                img.img-fluid.rounded.shadow-sm(
+                                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lss0MekF4s-B3OJYVpNEkAQAX49rE7nwPw&s'
+                                    alt=product.title
+                                    style="max-height: 400px; object-fit: contain;"
+                                )
+                    .col-md-7
+                        .product-info
+                            .row.g-4
+                                .col-md-6
+                                    .info-card.bg-light.rounded.p-3
+                                        label.text-muted.small.d-block Giá gốc
+                                        .h3.text-danger.mb-0 $#{product.price}
+                                
+                                .col-md-6
+                                    .info-card.bg-light.rounded.p-3
+                                        label.text-muted.small.d-block Giảm giá
+                                        .h3.text-success.mb-0 #{product.discountPercentage}%
+
+                                .col-md-6
+                                    .info-card.bg-light.rounded.p-3
+                                        label.text-muted.small.d-block Trạng thái
+                                        if product.status === "active"
+                                            .h5.text-success.mb-0
+                                                i.fas.fa-check-circle.me-2
+                                                | Hoat động
+                                        else
+                                            .h5.text-danger.mb-0
+                                                i.fas.fa-ban.me-2
+                                                | Không hoạt động
+                                
+                                .col-md-6
+                                    .info-card.bg-light.rounded.p-3
+                                        label.text-muted.small.d-block Số lượng trong kho
+                                        .h5.mb-0
+                                            i.fas.fa-box.me-2
+                                            | #{product.stock} sản phẩm
+
+                            .mt-4
+                                h5.mb-3 
+                                    i.fas.fa-align-left.me-2
+                                    | Mô tả sản phẩm
+                                .description.bg-light.rounded.p-3
+                                    p.mb-0 #{product.description || "Chưa có mô tả"}
+
+            .card-footer.bg-white
+                .d-flex.justify-content-between.align-items-center
+                    .text-muted.small
+                        i.fas.fa-clock.me-1
+                        | Cập nhật lần cuối: #{new Date(product.updatedAt).toLocaleString('vi-VN')}
+                    .btn-group
+                        a.btn.btn-primary(href=`/admin/products/edit/${product._id}`)
+                            i.fas.fa-edit.me-2
+                            | Sửa sản phẩm
+                        
+
+    script(src="/admin/js/product.js")

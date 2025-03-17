@@ -1,0 +1,30 @@
+extends ../../layouts/default.pug
+include ../../mixin/layoutProduct.pug
+
+block main
+    .container.py-4
+        //- Search Results Header
+        .row.mb-4
+            .col-12
+                .search-header
+                    h1.text-primary.mb-2
+                        i.fas.fa-search.me-2
+                        | Kết quả tìm kiếm
+                    if keyword
+                        p.text-muted.mb-0 
+                            | Tìm thấy 
+                            span.fw-bold #{products.length} 
+                            | kết quả cho từ khóa "
+                            span.fw-bold.text-primary #{keyword}
+                            | "
+
+        //- Products Grid
+        .row
+            +product-grid(products)
+        //- .card-footer.bg-white.mt-4
+        //-     .row.align-items-center.text-center
+        //-         .col-12.mb-3.text-muted
+        //-             | Hiển thị #{pagination.limitItems} / #{pagination.totalItems} sản phẩm
+        //-         .col-12
+        //-             .d-flex.justify-content-center
+        //-                 +pagination(pagination)

@@ -1,0 +1,164 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.py-4
+        if(messages.error)
+            .alert.alert-danger.alert-dismissible.fade.show.mb-4
+                i.fas.fa-exclamation-circle.me-2
+                | #{messages.error}
+                button(type="button" class="btn-close" data-bs-dismiss="alert")
+
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h1.text-primary.mb-0
+                i.fas.fa-user-plus.me-2
+                | Thêm mới tài khoản
+            a.btn.btn-outline-primary(href="/admin/accounts")
+                i.fas.fa-arrow-left.me-2
+                | Quay lại
+
+        .card.shadow-sm
+            .card-body
+                form(
+                    action="/admin/accounts/create"
+                    method="POST"
+                    class="needs-validation"
+                    novalidate
+                )
+                    .row
+                        .col-md-8
+                            .card.bg-light.border-0.mb-4
+                                .card-body
+                                    h5.card-title.mb-3
+                                        i.fas.fa-info-circle.me-2
+                                        | Thông tin cơ bản
+
+                                    .row.g-3
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="fullName") Họ tên *
+                                                input.form-control(
+                                                    type="text"
+                                                    id="fullName"
+                                                    name="fullName"
+                                                    required
+                                                )
+                                                .invalid-feedback Vui lòng nhập họ tên
+
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="email") Email *
+                                                input.form-control(
+                                                    type="email"
+                                                    id="email"
+                                                    name="email"
+                                                    required
+                                                )
+                                                .invalid-feedback Vui lòng nhập email hợp lệ
+
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="password") Mật khẩu *
+                                                .input-group
+                                                    input.form-control(
+                                                        type="password"
+                                                        id="password"
+                                                        name="password"
+                                                        required
+                                                    )
+                                                    button.btn.btn-outline-secondary(
+                                                        type="button"
+                                                        onclick="togglePassword()"
+                                                    )
+                                                        i.fas.fa-eye
+                                                .invalid-feedback Vui lòng nhập mật khẩu
+
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="phone") Số điện thoại
+                                                input.form-control(
+                                                    type="text"
+                                                    id="phone"
+                                                    name="phone"
+                                                )
+
+                        .col-md-4
+                            .card.bg-light.border-0.mb-4
+                                .card-body
+                                    h5.card-title.mb-3
+                                        i.fas.fa-image.me-2
+                                        | Ảnh đại diện
+
+                                    .text-center.mb-3
+                                        .avatar-preview.rounded-circle.bg-secondary.d-flex.align-items-center.justify-content-center.mx-auto(
+                                            style="width: 150px; height: 150px;"
+                                        )
+                                            i.fas.fa-user.fa-4x.text-white
+
+                                    .form-group
+                                        label.form-label(for="avatar") URL Ảnh đại diện
+                                        input.form-control(
+                                            type="text"
+                                            id="avatar"
+                                            name="avatar"
+                                            oninput="previewAvatar(this)"
+                                        )
+
+                            .card.bg-light.border-0
+                                .card-body
+                                    h5.card-title.mb-3
+                                        i.fas.fa-toggle-on.me-2
+                                        | Trạng thái
+
+                                    .d-flex.gap-3
+                                        .form-check
+                                            input.form-check-input(
+                                                type="radio"
+                                                id="statusActive"
+                                                name="status"
+                                                value="active"
+                                                checked
+                                            )
+                                            label.form-check-label(for="statusActive")
+                                                i.fas.fa-check-circle.text-success.me-1
+                                                | Hoạt động
+
+                                        .form-check
+                                            input.form-check-input(
+                                                type="radio"
+                                                id="statusInactive"
+                                                name="status"
+                                                value="inactive"
+                                            )
+                                            label.form-check-label(for="statusInactive")
+                                                i.fas.fa-ban.text-danger.me-1
+                                                | Dừng hoạt động
+
+                    .text-end.mt-4
+                        button.btn.btn-secondary.me-2(type="reset")
+                            i.fas.fa-undo.me-2
+                            | Nhập lại
+                        button.btn.btn-primary(type="submit")
+                            i.fas.fa-save.me-2
+                            | Tạo tài khoản
+
+    script.
+        function togglePassword() {
+            const password = document.getElementById("password");
+            const icon = document.querySelector(".fa-eye");
+            if (password.type === "password") {
+                password.type = "text";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
+            } else {
+                password.type = "password";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            }
+        }
+
+        function previewAvatar(input) {
+            const preview = document.querySelector('.avatar-preview');
+            if (input.value) {
+                preview.innerHTML = `<img src="${input.value}" class="rounded-circle" style="width: 100%; height: 100%; object-fit: cover;">`;
+            } else {
+                preview.innerHTML = '<i class="fas fa-user fa-4x text-white"></i>';
+            }
+        }

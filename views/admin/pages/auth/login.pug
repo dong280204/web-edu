@@ -1,0 +1,67 @@
+extends ../../layouts/auth.pug
+
+block main
+    .container.py-5
+        .row.justify-content-center
+            .col-md-6.col-lg-5
+                .card.shadow-lg.border-0
+                    .card-header.bg-primary.text-white.text-center.py-4
+                        h1.h3.mb-0
+                            i.fas.fa-user-shield.fa-2x.d-block.mb-2
+                            | Admin Dashboard
+                        p.mb-0.text-white-50 Đăng nhập vào trang quản trị
+
+                    .card-body.p-4
+                        if messages.error
+                            .alert.alert-danger.alert-dismissible.fade.show
+                                i.fas.fa-exclamation-circle.me-2
+                                | #{messages.error}
+                                button.btn-close(type="button" data-bs-dismiss="alert")
+
+                        form(
+                            action="/admin/auth/login"
+                            method="POST"
+                            class="needs-validation"
+                            novalidate
+                        )
+                            .form-group.mb-3
+                                label.form-label(for="email")
+                                    i.fas.fa-envelope.me-2
+                                    | Email
+                                .input-group
+                                    span.input-group-text
+                                        i.fas.fa-envelope
+                                    input.form-control(
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="admin@example.com"
+                                        required
+                                    )
+                                .invalid-feedback Vui lòng nhập email hợp lệ
+
+                            .form-group.mb-4
+                                label.form-label(for="password")
+                                    i.fas.fa-lock.me-2
+                                    | Mật khẩu
+                                .input-group
+                                    span.input-group-text
+                                        i.fas.fa-lock
+                                    input.form-control(
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        required
+                                    )
+                                    
+                                .invalid-feedback Vui lòng nhập mật khẩu
+
+                            .d-grid.gap-2
+                                button.btn.btn-primary.py-2(type="submit")
+                                    i.fas.fa-sign-in-alt.me-2
+                                    | Đăng nhập
+
+                    .card-footer.bg-light.text-center.py-3
+                        a.text-decoration-none(href="/")
+                            i.fas.fa-home.me-2
+                            | Quay về trang chủ

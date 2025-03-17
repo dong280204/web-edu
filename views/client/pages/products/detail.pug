@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+block main
+    -if(messages.success)
+        .message.info 
+            div(class='alert alert-success') #{messages.success}
+    .container.my-4
+        .row
+            .col-12
+                .product-detail
+                    .row
+                        .col-md-6.mb-4
+                        
+                            img.w-60(
+                                src=product.thumbnail
+                                alt=product.title
+                                style="object-fit: cover; min-height: 500px;"
+                            )
+                        .col-md-6
+                            h1.product-title.mb-3 #{product.title}
+                            //- text-muted: mau xam
+                            //- bagde: hien thi badge
+                            .product-price.mb-3
+                                .price-new.h3.text-danger.mb-2 $#{product.priceNew}
+                                .price-old.text-muted
+                                    del $#{product.price}
+                                .discount.badge.bg-success.h5 -#{product.discountPercentage}%
+                            
+                            .product-stock.mb-3
+                                if product.stock > 0
+                                    .badge.bg-success.h6 Còn hàng
+                                    span.ms-2.text-muted (#{product.stock} sản phẩm)
+                                else
+                                    .badge.bg-danger.h6 Hết hàng
+                            
+                            .product-description.mb-4
+                                h4.mb-3 Mô tả sản phẩm
+                                p.text-muted #{product.description}
+                            form(action=`/cart/add/${product.id}` method="POST")
+                                input(class="form-control mb-2" type="number" name="quantity" value="1" min="1" max=product.stock)
+                                button(type="submit" class="btn btn-success btn-block") Thêm vào giỏ hàng

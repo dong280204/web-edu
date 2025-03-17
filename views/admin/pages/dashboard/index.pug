@@ -1,0 +1,82 @@
+extend ../../layouts/default.pug
+
+block main 
+    //- container-fuild : full width container
+
+    .container-fluid.py-4
+        // Welcome Section
+        .d-flex.justify-content-between.align-items-center.mb-4
+    
+            h1.text-primary.mb-2
+                i.fas.fa-tachometer-alt.me-2
+                | Bảng điều khiển
+            p.text-muted.mb-0 Xin chào, #{user.fullName}!
+
+        // Statistics Cards
+        .row.g-4.mb-4
+            //- border-left-primary viền trái màu xanh 
+            //- h-100 chiều cao 100%
+            //- text-uppercase chữ in hoa
+            //- text-xs chữ nhỏ
+            // Products Stats
+            .col-xl-3.col-md-6
+                .card.border-left-primary.shadow.h-100.py-2
+                    .card-body
+                        .row.align-items-center
+                            .col
+                                .text-xs.text-uppercase.mb-1 Tổng sản phẩm
+                                .h5.mb-0.font-weight-bold #{statistic.product.total}
+
+            // Admin Users Stats
+            .col-xl-3.col-md-6
+                .card.border-left-success.shadow.h-100.py-2
+                    .card-body
+                        .row.align-items-center
+                            .col
+                                .text-xs.text-uppercase.mb-1 Admin
+                                .h5.mb-0.font-weight-bold #{statistic.user.total}
+                            
+            // Regular Users Stats
+            .col-xl-3.col-md-6
+                .card.border-left-info.shadow.h-100.py-2
+                    .card-body
+                        .row.align-items-center
+                            .col
+                                .text-xs.text-uppercase.mb-1 Người dùng
+                                .h5.mb-0.font-weight-bold #{statistic.user.total}
+
+            // Total Users Stats
+            .col-xl-3.col-md-6
+                .card.border-left-warning.shadow.h-100.py-2
+                    .card-body
+                        .row.align-items-center
+                            .col
+                                .text-xs.text-uppercase.mb-1 Tổng tài khoản
+                                .h5.mb-0.font-weight-bold #{statistic.user.total + statistic.user.total}
+
+        // Quick Actions
+        .row.mb-4
+            .col-12
+                .card.shadow
+                    .card-header.bg-primary.text-white
+                        h5.mb-0 
+                            i.fas.fa-bolt.me-2
+                            | Thao tác nhanh
+                    .card-body
+                        .row.g-3
+                            .col-md-3
+                                a.btn.btn-light.w-100.py-3(href="/admin/products/create")
+                                    i.fas.fa-plus-circle.mb-2.d-block.fs-4
+                                    | Thêm sản phẩm
+                            .col-md-3
+                                a.btn.btn-light.w-100.py-3(href="/admin/products")
+                                    i.fas.fa-list.mb-2.d-block.fs-4
+                                    | Quản lý sản phẩm
+                            .col-md-3
+                                a.btn.btn-light.w-100.py-3(href="/admin/accounts")
+                                    i.fas.fa-users-cog.mb-2.d-block.fs-4
+                                    | Quản lý tài khoản
+                            .col-md-3
+                                a.btn.btn-light.w-100.py-3(href="/admin/my-account")
+                                    i.fas.fa-user-edit.mb-2.d-block.fs-4
+                                    | Tài khoản của tôi

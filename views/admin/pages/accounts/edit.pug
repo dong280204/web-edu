@@ -1,0 +1,145 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.py-4
+        if(messages.success)
+            .alert.alert-success.alert-dismissible.fade.show.mb-4
+                i.fas.fa-check-circle.me-2
+                | #{messages.success}
+                button(type="button" class="btn-close" data-bs-dismiss="alert")
+
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h1.text-primary.mb-0
+                i.fas.fa-user-edit.me-2
+                | Chỉnh sửa tài khoản
+            a.btn.btn-outline-primary(href="/admin/accounts")
+                i.fas.fa-arrow-left.me-2
+                | Quay lại
+
+        .card.shadow-sm
+            .card-body
+                form(
+                    action=`/admin/accounts/edit/${records.id}?_method=PATCH`
+                    method="POST"
+                    class="needs-validation"
+                    novalidate
+                )
+                    .row
+                        .col-md-8
+                            .card.bg-light.border-0.mb-4
+                                .card-body
+                                    h5.card-title.mb-3 
+                                        i.fas.fa-info-circle.me-2
+                                        | Thông tin cơ bản
+
+                                    .row.g-3
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="fullName") Họ tên *
+                                                input.form-control(
+                                                    type="text"
+                                                    id="fullName"
+                                                    name="fullName"
+                                                    value=records.fullName
+                                                    required
+                                                )
+
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="email") Email *
+                                                input.form-control(
+                                                    type="email"
+                                                    id="email"
+                                                    name="email"
+                                                    value=records.email
+                                                    required
+                                                )
+
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="password") Mật khẩu *
+                                                .input-group
+                                                    input.form-control(
+                                                        type="password"
+                                                        id="password"
+                                                        name="password"
+                                                        value=records.password
+                                                        required
+                                                    )
+                                        
+
+                                        .col-md-6
+                                            .form-group
+                                                label.form-label(for="phone") Số điện thoại
+                                                input.form-control(
+                                                    type="text"
+                                                    id="phone"
+                                                    name="phone"
+                                                    value=records.phone
+                                                )
+
+                        .col-md-4
+                            .card.bg-light.border-0.mb-4
+                                .card-body
+                                    h5.card-title.mb-3
+                                        i.fas.fa-image.me-2
+                                        | Ảnh đại diện
+
+                                    .text-center.mb-3
+                                        if records.avatar
+                                            img.rounded-circle.shadow-sm(
+                                                src=records.avatar
+                                                alt="Avatar"
+                                                style="width: 150px; height: 150px; object-fit: cover;"
+                                            )
+                                        else
+                                            .avatar-placeholder.rounded-circle.bg-secondary.d-flex.align-items-center.justify-content-center.mx-auto(
+                                                style="width: 150px; height: 150px;"
+                                            )
+                                                i.fas.fa-user.fa-4x.text-white
+
+                                    .form-group
+                                        label.form-label(for="avatar") URL Ảnh đại diện
+                                        input.form-control(
+                                            type="text"
+                                            id="avatar"
+                                            name="avatar"
+                                            value=records.avatar
+                                        )
+
+                            .card.bg-light.border-0
+                                .card-body
+                                    h5.card-title.mb-3
+                                        i.fas.fa-toggle-on.me-2
+                                        | Trạng thái
+
+                                    .d-flex.gap-3
+                                        .form-check
+                                            input.form-check-input(
+                                                type="radio"
+                                                id="statusActive"
+                                                name="status"
+                                                value="active"
+                                                checked=(records.status == 'active' ? true:false)
+                                            )
+                                            label.form-check-label(for="statusActive") 
+                                                i.fas.fa-check-circle.text-success.me-1
+                                                | Hoạt động
+
+                                        .form-check
+                                            input.form-check-input(
+                                                type="radio"
+                                                id="statusInactive"
+                                                name="status"
+                                                value="inactive"
+                                                checked=(records.status == 'inactive' ? true:false)
+                                            )
+                                            label.form-check-label(for="statusInactive")
+                                                i.fas.fa-ban.text-danger.me-1
+                                                | Dừng hoạt động
+
+                    .text-end.mt-4
+                        a.btn.btn-secondary.me-2(href="/admin/accounts") Hủy
+                        button.btn.btn-primary(type="submit")
+                            i.fas.fa-save.me-2
+                            | Lưu thay đổi

@@ -1,0 +1,62 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.my-5
+        .row.justify-content-center
+            .col-md-8
+                .card.shadow-sm
+                    .card-header.bg-primary.text-white.py-3
+                        h3.mb-0
+                            i.fas.fa-user-circle.me-2
+                            | Thông tin tài khoản
+
+                    .card-body.py-4
+                        .text-center.mb-4
+                            if user.avatar
+                                //- bo anh thành hình tròn 
+                                img.rounded-circle.shadow-sm(
+                                    src=user.avatar
+                                    alt="Avatar"
+                                    style="width: 150px; height: 150px; object-fit: cover;"
+                                )
+                            else
+                                img.rounded-circle.shadow-sm(
+                                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpWyleA61aqadhutVq_kARFzefhDbxS63M-Q&s'
+                                    alt="Avatar"
+                                    style="width: 150px; height: 150px; object-fit: cover;"
+                                )
+                            
+                        .row.g-4
+                            .col-md-6
+                                .info-group
+                                    label.text-muted.small Họ và tên
+                                    .form-control-plaintext.fw-bold #{user.fullName}
+
+                            .col-md-6
+                                .info-group
+                                    label.text-muted.small Email
+                                    .form-control-plaintext.fw-bold #{user.email}
+
+                            .col-md-6
+                                .info-group
+                                    label.text-muted.small Số điện thoại
+                                    .form-control-plaintext.fw-bold #{user.phone || "Chưa cập nhật"}
+
+                            .col-md-6
+                                .info-group
+                                    label.text-muted.small Trạng thái tài khoản
+                                    .mt-1
+                                        if user.status === "active"
+                                            span.badge.bg-success
+                                                i.fas.fa-check-circle.me-1
+                                                | Đang hoạt động
+                                        else
+                                            span.badge.bg-danger
+                                                i.fas.fa-ban.me-1
+                                                | Đã khóa
+                    //- .card-footer.bg-light.py-3.text-center
+                    //-     .btn-group
+                    //-         a.btn.btn-primary(href="/user/edit")
+                    //-             i.fas.fa-user-edit.me-2
+                    //-             | Chỉnh sửa thông tin
+                            

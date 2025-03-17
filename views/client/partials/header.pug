@@ -1,0 +1,59 @@
+//- sticky-top: khi cuộn xuống dưới thì header sẽ dính ở trên cùng của trình duyệt
+//-position-relative: cho phần tử con sử dụng position: relative
+//-position-absolute: cho phần tử con sử dụng position: absolute
+//-rounded-pill: bo tròn góc
+header.header.bg-dark.sticky-top
+    .container
+        .row.align-items-center.py-3
+            .col-lg-2.col-md-3.col-6
+                .logo
+                    a(href="/")
+                        img(src="/images/logo.png" alt="Logo" width="80px")
+            .col-lg-5.col-md-4
+                form.search-form(action="/search" method="GET")
+                    .input-group
+                        input.form-control(
+                            type="text"
+                            placeholder="Tìm kiếm sản phẩm..."
+                            name="keyword"
+                            value=keyword
+                        )
+                        button.btn.btn-light(type="submit")
+                            i.fas.fa-search Tìm kiếm
+
+            .col-lg-5.col-md-5.col-6
+                .d-flex.justify-content-end.align-items-center
+                    if user
+                        a.btn.btn-outline-light.position-relative.me-3(href="/cart")
+                            i.fas.fa-shopping-cart Giỏ hàng
+                            if cart && cart.totalQuantity > 0
+                                span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger
+                                    | #{cart.totalQuantity}
+                        .d-flex
+                            a.btn.btn-outline-light.me-2(href="/user/info")
+                                i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
+                                | #{user.fullName}
+                            a.btn.btn-light(href="/user/logout")
+                                i.fas.fa-user-plus.me-2.d-none.d-md-inline
+                                | Đăng Xuất
+                    else
+                        .d-flex
+                            a.btn.btn-outline-light.me-2(href="/user/login")
+                                i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
+                                | Đăng nhập
+                            a.btn.btn-light(href="/user/register")
+                                i.fas.fa-user-plus.me-2.d-none.d-md-inline
+                                | Đăng ký
+
+block append style
+    style.
+        .header {
+            background-color: #404040;  /* Màu đen nhạt hơn */
+            box-shadow: 0 2px 4px rgba(84, 59, 59, 0.99);
+        }
+        .header .btn {
+            transition: all 0.3s;
+        }
+        .header .btn:hover {
+            transform: translateY(-2px);
+        }

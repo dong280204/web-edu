@@ -1,0 +1,115 @@
+extend ../../layouts/default.pug  
+include ../../mixin/filter-status.pug
+include ../../mixin/search.pug
+include ../../mixin/pagination.pug
+include ../../mixin/sort.pug
+
+block main 
+    if(messages.success)
+        .alert.alert-success.alert-dismissible.fade.show.mb-4
+            i.fas.fa-check-circle.me-2
+            | #{messages.success}
+            button(type="button" class="btn-close" data-bs-dismiss="alert")
+    //- d-flex : display flex
+    //- justify-content-between : căn giữa theo chiều ngang và căn đều khoảng cách giữa các phần tử
+    //- align-items-center : căn giữa theo chiều dọc
+    .d-flex.justify-content-between.align-items-center.mb-4
+        h1.text-primary.mb-0
+            i.fas.fa-box.me-2
+            | Danh sách sản phẩm
+        a(href="/admin/products/create" class="btn btn-success")
+            i.fas.fa-plus-circle.me-2
+            | Thêm sản phẩm mới
+    .card.shadow-sm.mb-4
+        .card-header.bg-white.py-3
+            .row.g-3
+                .col-md-6
+                    +filterStatus(filterStatus)
+                .col-md-6
+                    +search()
+
+        .card-header.bg-light.py-3
+            .row
+                .col-md-4
+                    +sort()
+        
+        .card-body.p-0
+            //- table-hover : hiệu ứng hover khi di chuột vào dòng
+            //- table-striped : hiệu ứng xen kẽ màu
+            //- align-middle : căn giữa theo chiều dọc
+            table.table.table-hover.align-middle.mb-0
+                thead.bg-light
+                    tr
+                        th.text-center(width="5%") STT
+                        th(width="15%") Hình ảnh
+                        th(width="25%") Tiêu đề
+                        th.text-end(width="10%") Giá
+                        th.text-center(width="10%") Vị trí
+                        th.text-center(width="15%") Trạng thái
+                        th.text-center(width="20%") Thao tác
+                tbody
+                    each product, index in products 
+                        tr
+                            td.text-center #{index + 1}
+                            td
+                                img.rounded.shadow-sm(
+                                    src=product.thumbnail
+                                    alt=product.title
+                                    style="width: 80px; height: 80px; object-fit: cover;"
+                                )
+                            td
+                                .fw-bold #{product.title}
+                            td.text-end.text-danger.fw-bold $#{product.price}
+                            td.text-center #{product.position}
+                            td.text-center
+                                if(product.status == "active")
+                                    button(
+                                        class="badge bg-success border-0"
+                                        button-change-status 
+                                        data-status="active"
+                                        data-id=product.id
+                                    )
+                                        i.fas.fa-check-circle.me-1
+                                        | Hoạt động
+                                else 
+                                    button(
+                                        class="badge bg-danger border-0"
+                                        button-change-status
+                                        data-status="inactive"
+                                        data-id=product.id
+                                    )
+                                        i.fas.fa-ban.me-1
+                                        | Không hoạt động
+                            td.text-center
+                                .btn-group
+                                    a(
+                                        href=`/admin/products/detail/${product.id}`
+                                        class="btn btn-info btn-sm"
+                                        title="Chi tiết"
+                                    )
+                                        i.fas.fa-eye Chi tiết
+                                    a(
+                                        href=`/admin/products/edit/${product.id}`
+                                        class="btn btn-warning btn-sm"
+                                        title="Sửa"
+                                    )
+                                        i.fas.fa-edit Sửa
+                                    button(
+                                        class="btn btn-danger btn-sm"
+                                        button-delete 
+                                        data-id=product.id
+                                        title="Xóa"
+                                    )
+                                        i.fas.fa-trash Xóa
+
+        .card-footer.bg-white
+            .row.align-items-center
+                .col-md-6.text-muted
+                    | Hiển thị #{pagination.limitItems} / #{pagination.totalItems} sản phẩm
+                .col-md-6
+                    +pagination(pagination)
+
+    form#form-change-status(action="" method="POST" data-path="/admin/products/change-status")
+    form#form-delete-item(action="" method="POST" data-path="/admin/products/delete")
+
+    script(src="/admin/js/product.js")

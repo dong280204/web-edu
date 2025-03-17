@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+include ../../mixin/layoutProduct.pug
+
+block main
+    .bg-primary.text-white.py-5.mb-5
+        .container
+            //-fw-bold : font-weight: bold
+            //-display-4 : font-size: 2.5rem
+            //-lead : font-size: 1.25rem
+            .row.align-items-centers
+                .col-md-6
+                    h1.display-4.fw-bold Welcome to LMQ Store
+                    p.lead.mb-4 Discover amazing products at great prices
+                    a.btn.btn-light.btn-lg(href="/products")
+                        i.fas.fa-shopping-bag.me-2
+                        | Shop Now
+
+    .container
+        
+        section.featured-section.mb-5
+            .section-header.bg-light.rounded-3.p-4.mb-4
+                .row.align-items-center
+                    .col-md-8
+                        h2.section-title.mb-2
+                            i.fas.fa-star.text-warning.me-2
+                            | Sản phẩm nổi bật
+                        p.text-muted.mb-0 Khám phá những sản phẩm được yêu thích nhất
+                    .col-md-4.text-md-end
+                        a.btn.btn-primary.btn-lg(href="/products?featured=1")
+                            | Xem tất cả
+            .row
+                +product-grid(products)
+
+        section.featured-section.mb-5
+            .section-header.bg-light.rounded-3.p-4.mb-4
+                .row.align-items-center
+                    .col-md-8
+                        h2.section-title.mb-2
+                            i.fas.fa-star.text-warning.me-2
+                            | Sản phẩm mới nhất
+                        p.text-muted.mb-0 Khám phá những sản phẩm mới nhất
+                    .col-md-4.text-md-end
+                        a.btn.btn-primary.btn-lg(href="/products?featured=1")
+                            | Xem tất cả
+            .row
+                +product-grid(newProducts)

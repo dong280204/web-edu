@@ -1,0 +1,206 @@
+extends ../../layouts/default.pug 
+
+block main
+    .container.py-4
+        if(messages.success)
+            .alert.alert-success.alert-dismissible.fade.show.mb-4
+                i.fas.fa-check-circle.me-2
+                | #{messages.success}
+                button(type="button" class="btn-close" data-bs-dismiss="alert")
+        //- justify-content-between : căn giữa theo chiều ngang và căn đều khoảng cách giữa các phần tử
+        //- align-items-center : căn giữa theo chiều dọc
+
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h1.text-primary.mb-0
+                i.fas.fa-edit.me-2
+                | Chỉnh sửa sản phẩm
+            a.btn.btn-outline-primary(href="/admin/products")
+                i.fas.fa-arrow-left.me-2
+                | Quay lại
+
+        form(
+            action=`/admin/products/edit/${product.id}?_method=PATCH`
+            method="POST"
+            id="form-edit-product"
+            class="needs-validation"
+            novalidate
+        )
+            .row
+                .col-md-8
+                    .card.shadow-sm.mb-4
+                        .card-header.bg-white
+                            h5.card-title.mb-0
+                                i.fas.fa-info-circle.me-2
+                                | Thông tin cơ bản
+
+                        .card-body
+                            .row.g-3
+                                .col-md-12
+                                    .form-group
+                                        label.form-label(for="title") Tiêu đề *
+                                        input.form-control(
+                                            type="text"
+                                            id="title"
+                                            name="title"
+                                            value=product.title
+                                            required
+                                        )
+                                        .invalid-feedback Vui lòng nhập tiêu đề
+
+                                .col-md-12
+                                    .form-group
+                                        label.form-label(for="desc") Mô tả
+                                        textarea.form-control(
+                                            id="desc"
+                                            name="description"
+                                            rows="5"
+                                        ) #{product.description}
+
+                                .col-md-6
+                                    .form-group
+                                        label.form-label(for="price") Giá *
+                                        .input-group
+                                            span.input-group-text $
+                                            input.form-control(
+                                                type="number"
+                                                id="price"
+                                                name="price"
+                                                value=product.price
+                                                min="0"
+                                                required
+                                            )
+
+                                .col-md-6
+                                    .form-group
+                                        label.form-label(for="discount") % Giảm giá
+                                        .input-group
+                                            input.form-control(
+                                                type="number"
+                                                id="discount"
+                                                name="discountPercentage"
+                                                value=product.discountPercentage
+                                                min="0"
+                                                max="100"
+                                            )
+                                            span.input-group-text %
+
+                                .col-md-6
+                                    .form-group
+                                        label.form-label(for="stock") Số lượng *
+                                        input.form-control(
+                                            type="number"
+                                            id="stock"
+                                            name="stock"
+                                            value=product.stock
+                                            min="0"
+                                            required
+                                        )
+
+                                .col-md-6
+                                    .form-group
+                                        label.form-label(for="position") Vị trí
+                                        input.form-control(
+                                            type="number"
+                                            id="position"
+                                            name="position"
+                                            value=product.position
+                                            placeholder="Tự động tăng"
+                                            min="1"
+                                        )
+
+                .col-md-4
+                    .card.shadow-sm.mb-4
+                        .card-header.bg-white
+                            h5.card-title.mb-0
+                                i.fas.fa-image.me-2
+                                | Hình ảnh
+
+                        .card-body
+                            .text-center.mb-3
+                                img(
+                                    src=product.thumbnail || "/images/default-product.jpg"
+                                    alt=product.title
+                                    style="max-height: 200px; object-fit: contain;"
+                                )
+                            .form-group
+                                label.form-label(for="thumbnail") URL hình ảnh
+                                input.form-control(
+                                    type="text"
+                                    id="thumbnail"
+                                    name="thumbnail"
+                                    value=product.thumbnail
+                                    oninput="previewImage(this)"
+                                )
+
+                    .card.shadow-sm.mb-4
+                        .card-header.bg-white
+                            h5.card-title.mb-0
+                                i.fas.fa-cog.me-2
+                                | Tùy chọn
+
+                        .card-body
+                            .form-group.mb-3
+                                label.form-label Loại sản phẩm
+                                .d-flex.gap-3
+                                    .form-check
+                                        input#featured1.form-check-input(
+                                            type="radio"
+                                            name="featured"
+                                            value="1"
+                                            checked=(product.featured == 1)
+                                        )
+                                        label.form-check-label(for="featured1")
+                                            i.fas.fa-star.text-warning.me-1
+                                            | Nổi bật
+
+                                    .form-check
+                                        input#featured0.form-check-input(
+                                            type="radio"
+                                            name="featured"
+                                            value="0"
+                                            checked=(product.featured == 0)
+                                        )
+                                        label.form-check-label(for="featured0")
+                                            i.fas.fa-star.text-muted.me-1
+                                            | Bình thường
+
+                            .form-group
+                                label.form-label Trạng thái
+                                .d-flex.gap-3
+                                    .form-check
+                                        input#statusActive.form-check-input(
+                                            type="radio"
+                                            name="status"
+                                            value="active"
+                                            checked=(product.status == 'active')
+                                        )
+                                        label.form-check-label(for="statusActive")
+                                            i.fas.fa-check-circle.text-success.me-1
+                                            | Hoạt động
+
+                                    .form-check
+                                        input#statusInactive.form-check-input(
+                                            type="radio"
+                                            name="status"
+                                            value="inactive"
+                                            checked=(product.status == 'inactive')
+                                        )
+                                        label.form-check-label(for="statusInactive")
+                                            i.fas.fa-ban.text-danger.me-1
+                                            | Dừng hoạt động
+
+            .text-end.mt-4
+                button.btn.btn-secondary.me-2(type="reset")
+                    i.fas.fa-undo.me-2
+                    | Hoàn tác
+                button.btn.btn-primary(type="submit")
+                    i.fas.fa-save.me-2
+                    | Cập nhật
+
+    script.
+        function previewImage(input) {
+            const preview = document.getElementById('preview-image');
+            preview.src = input.value || '/images/default-product.jpg';
+        }
+
+    script(src="/admin/js/product.js")

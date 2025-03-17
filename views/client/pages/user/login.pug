@@ -1,0 +1,73 @@
+extends ../../layouts/default.pug
+
+block main
+    //-col-md-6.col-lg-5: width 50% on medium and large screens
+    //-border-0: bo viền 
+    .container.py-5
+        .row.justify-content-center
+            .col-md-6.col-lg-5
+                .card.shadow-lg.border-0
+                    .card-header.bg-primary.text-white.text-center.py-4
+                        h1.h3.mb-0
+                            i.fas.fa-user-circle.fa-2x.d-block.mb-2
+                            | Đăng nhập tài khoản
+
+                    .card-body.p-4
+                        if messages.error
+                            .alert.alert-danger.alert-dismissible.fade.show
+                                i.fas.fa-exclamation-circle.me-2
+                                | #{messages.error}
+                                button.btn-close(type="button" data-bs-dismiss="alert")
+
+                        form(
+                            action="/user/login"
+                            method="POST"
+                            class="needs-validation"
+                            novalidate
+                        )
+                            .form-group.mb-3
+                                label.form-label(for="email") 
+                                    i.fas.fa-envelope.me-2
+                                    | Email
+                                .input-group
+                                    span.input-group-text
+                                        i.fas.fa-envelope
+                                    input.form-control(
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        placeholder="Nhập email của bạn"
+                                        required
+                                    )
+                                .invalid-feedback Vui lòng nhập email hợp lệ
+
+                            .form-group.mb-4
+                                label.form-label(for="password")
+                                    i.fas.fa-lock.me-2
+                                    | Mật khẩu
+                                .input-group
+                                    span.input-group-text
+                                        i.fas.fa-lock
+                                    input.form-control(
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                        placeholder="Nhập mật khẩu"
+                                        required
+                                    )
+                                .invalid-feedback Vui lòng nhập mật khẩu
+
+                            .d-grid.gap-2.mb-3
+                                button.btn.btn-primary.py-2(type="submit")
+                                    i.fas.fa-sign-in-alt.me-2
+                                    | Đăng nhập
+
+                            
+
+                    .card-footer.bg-light.text-center.py-3
+                        | Chưa có tài khoản? 
+                        a.text-decoration-none(href="/user/register")
+                            | Đăng ký ngay
+                            i.fas.fa-arrow-right.ms-2
+
+    

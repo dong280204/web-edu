@@ -1,0 +1,20 @@
+extends ../../layouts/default.pug
+include ../../mixin/layoutProduct.pug
+include ../../mixin/pagination.pug
+block main
+    .container.my-4
+        .row.mb-4
+            .col-12.title-section
+                h2.inner-title.text-center.position-relative 
+                    | Danh sách sản phẩm
+                    span.underline.position-absolute
+        .row.g-4
+            +product-grid(products)
+
+        .card-footer.bg-white.mt-4
+            .row.align-items-center.text-center
+                .col-12.mb-3.text-muted
+                    | Hiển thị #{pagination.limitItems} / #{pagination.totalItems} sản phẩm
+                .col-12
+                    .d-flex.justify-content-center
+                        +pagination(pagination)

@@ -1,0 +1,26 @@
+mixin product-grid(products)
+    each item in products 
+        .col-4.mb-3
+            .product-item
+                .inner-image
+                    if(item.featured=='1')
+                        .inner-featured 
+                            span.badge.bg-success Nổi bật
+                    a(href=`products/${item.slug}`)
+                        img(src=item.thumbnail, alt=item.title)
+                    .inner-actions
+                        button.btn.btn-sm.btn-light.me-2(title="Thêm vào giỏ")
+                            i.fas.fa-shopping-cart
+                        button.btn.btn-sm.btn-light(title="Yêu thích")
+                            i.fas.fa-heart
+                .inner-content
+                    h3.inner-title 
+                        a(href=`products/${item.slug}`) #{item.title}
+                    .price-wrapper
+                        .inner-price-new #{item.priceNew}$
+                        if item.price > item.priceNew
+                            .inner-price-old #{item.price}$
+                    if item.discountPercentage > 0
+                        .inner-discount
+                            span.badge.bg-danger -#{item.discountPercentage}%
+
