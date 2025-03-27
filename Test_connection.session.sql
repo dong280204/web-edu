@@ -1,0 +1,1 @@
+select * from Nhanvien where luong > any(SELECT luong from Nhanvien where diachi = 'Hà Nội');

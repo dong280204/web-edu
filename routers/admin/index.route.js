@@ -1,5 +1,6 @@
 const dashboardRoutes = require('./dashboard.route');
 const productRoutes = require('./product.router');
+const productCategoryRoutes = require('./product-category.router');
 const accountRoutes = require('./account.router');
 const authRoutes = require('./auth.route');
 const authMidleware = require('../../middleware/admin/auth.midleware');
@@ -19,5 +20,6 @@ module.exports = (app) => {
     app.use(Path_admin + '/my-account',authMidleware.requireAuth, myAccountRouter)
     app.use(Path_admin + '/user',authMidleware.requireAuth, userRouter)
     app.use(Path_admin + '/order',authMidleware.requireAuth, oderRouter)
+    app.use(Path_admin + '/products-category',authMidleware.requireAuth, productCategoryRoutes)
 
 }

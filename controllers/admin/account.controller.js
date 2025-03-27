@@ -10,7 +10,7 @@ module.exports.index=async(req, res) => {
     }
     //Goi ham paginationHelper
     const count = await Account.countDocuments(find)
-    const objectPagination = paginationHelper(req,count)
+    const objectPagination = paginationHelper(req,count,4)
     //end Goi ham paginationHelper
 
     //Gọi hàm searchHelper

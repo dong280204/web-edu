@@ -1,0 +1,26 @@
+extends ../../layouts/default.pug
+include ../../mixin/tree2.pug
+block main
+    .d-flex.justify-content-between.align-items-center.mb-4
+        h1.text-primary.mb-0
+            i.fas.fa-box.me-2
+            | Danh sách danh mục
+        a(href="/admin/products-category/create" class="btn btn-success")
+            i.fas.fa-plus-circle.me-2
+            | Thêm sản phẩm mới
+    .card.shadow-sm.mb-4
+        .card-body.p-0
+            //- table-hover : hiệu ứng hover khi di chuột vào dòng
+            //- table-striped : hiệu ứng xen kẽ màu
+            //- align-middle : căn giữa theo chiều dọc
+            table.table.table-hover.align-middle.mb-0
+                thead.bg-light
+                    tr
+                        th.text-center(width="5%") STT
+                        th(width="15%") Hình ảnh
+                        th(width="25%") Tiêu đề
+                        th.text-center(width="10%") Vị trí
+                        th.text-center(width="15%") Trạng thái
+                        th.text-center(width="20%") Thao tác
+                tbody
+                    +tree(productCategories)

@@ -1,0 +1,57 @@
+mixin tree(productCategories, level = 1)
+    each product in productCategories
+        - const prefix = Array(level + 1).join("-- ")
+        tr
+            td.text-center #{product.index}
+            td
+                img.rounded.shadow-sm(
+                    src=product.thumbnail
+                    alt=product.title
+                    style="width: 80px; height: 80px; object-fit: cover;"   
+                )
+            td
+                .fw-bold #{prefix}#{product.title}
+            
+            td.text-center #{product.position}
+            td.text-center
+                if(product.status == "active")
+                    button(
+                        class="badge bg-success border-0"
+                        button-change-status 
+                        data-status="active"
+                        data-id=product.id
+                    )
+                        i.fas.fa-check-circle.me-1
+                        | Hoạt động
+                else 
+                    button(
+                        class="badge bg-danger border-0"
+                        button-change-status
+                        data-status="inactive"
+                        data-id=product.id
+                    )
+                        i.fas.fa-ban.me-1
+                        | Không hoạt động
+            td.text-center
+                .btn-group
+                    a(
+                        href=`/admin/products/detail/${product.id}`
+                        class="btn btn-info btn-sm"
+                        title="Chi tiết"
+                    )
+                        i.fas.fa-eye Chi tiết
+                    a(
+                        href=`/admin/products/edit/${product.id}`
+                        class="btn btn-warning btn-sm"
+                        title="Sửa"
+                    )
+                        i.fas.fa-edit Sửa
+                    button(
+                        class="btn btn-danger btn-sm"
+                        button-delete 
+                        data-id=product.id
+                        title="Xóa"
+                    )
+                        i.fas.fa-trash Xóa
+        if product.children && product.children.length > 0
+            +tree(product.children, level + 1)
