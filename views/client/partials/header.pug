@@ -27,11 +27,9 @@ header.header.bg-dark.sticky-top
                         i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
                         | Sản phẩm
                     if user
-                        a.btn.btn-outline-light.position-relative.me-2(href="/cart")
-                            i.fas.fa-shopping-cart Giỏ hàng
-                            if cart && cart.totalQuantity > 0
-                                span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger
-                                    | #{cart.totalQuantity}
+                        a.btn.btn-outline-light.me-2(href="/cart")
+                                i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
+                                | Gỉỏ hàng
                         .d-flex
                             a.btn.btn-outline-light.me-2(href="/user/info")
                                 i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
