@@ -1,6 +1,6 @@
 const User = require("../../models/user.model")
 const md5= require("md5")
-
+const generate=require('../../helpers/ganerate')
 // /user/register
 module.exports.register = async (req, res) => {
     res.render("client/pages/user/register", {
@@ -19,6 +19,7 @@ module.exports.registerPost = async (req, res) => {
         return
     }
     req.body.password = md5(req.body.password)
+    req.body.tokenUser = generate.generateRandomString(20)
     const user=new User(req.body)
     await user.save()
     res.cookie("tokenUser",user.tokenUser)

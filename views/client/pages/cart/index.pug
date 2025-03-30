@@ -85,9 +85,12 @@ block main
                             a.btn.btn-primary.w-100.mb-2(href="/checkout")
                                 i.fas.fa-credit-card.me-2
                                 | Thanh toán ngay
-                            a.btn.btn-outline-primary.w-100(href="/products")
+                            a.btn.btn-outline-primary.w-100.mb-2(href="/products")
                                 i.fas.fa-arrow-left.me-2
                                 | Tiếp tục mua sắm
+                            a.btn.btn-outline-primary.w-100(href="/cart/history")
+                                i.fas.fa-arrow-left.me-2
+                                | Lịch sử mua hàng
         else
             .card.shadow-sm.text-center.py-5
                 i.fas.fa-shopping-cart.fa-3x.text-muted.mb-3
@@ -96,6 +99,7 @@ block main
                 a.btn.btn-primary(href="/products")
                     i.fas.fa-shopping-bag.me-2
                     | Mua sắm ngay
+        
 
     script.
         function removeItem(productId) {

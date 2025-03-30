@@ -3,8 +3,8 @@ const Product = require("../../models/product.model");
 
 // cart get
 module.exports.index= async(req, res) => {
-    const cartId = req.cookies.cartId;
-    const cart = await Cart.findOne({_id: cartId});
+    const user_id = req.cookies.tokenUser;
+    const cart = await Cart.findOne({user_id: user_id});
 
     if(cart.product.length>0){
         for(const item of cart.product){

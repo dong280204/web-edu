@@ -1,5 +1,5 @@
 extends ../../layouts/default.pug 
-
+include ../../mixin/tree.pug
 block main
     .container.py-4
         if(messages.success)
@@ -43,7 +43,16 @@ block main
                                             required
                                         )
                                         .invalid-feedback Vui lòng nhập tiêu đề
-
+                                .col-md-12
+                                    .form-group
+                                        label.form-label(for="product_category_id") Danh mục
+                                        select.form-control(
+                                            name="product_category_id" 
+                                            id="product_category_id"
+                                        )
+                                            option(value="") Chọn danh mục 
+                                            if(productCategories)
+                                                +tree(productCategories)
                                 .col-md-12
                                     .form-group
                                         label.form-label(for="desc") Mô tả

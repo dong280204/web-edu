@@ -35,23 +35,23 @@ mixin tree(productCategories, level = 1)
             td.text-center
                 .btn-group
                     a(
-                        href=`/admin/products/detail/${product.id}`
+                        href=`/admin/products-category/detail/${product.id}`
                         class="btn btn-info btn-sm"
                         title="Chi tiết"
                     )
                         i.fas.fa-eye Chi tiết
                     a(
-                        href=`/admin/products/edit/${product.id}`
+                        href=`/admin/products-category/edit/${product.id}`
                         class="btn btn-warning btn-sm"
                         title="Sửa"
                     )
                         i.fas.fa-edit Sửa
-                    button(
-                        class="btn btn-danger btn-sm"
-                        button-delete 
-                        data-id=product.id
-                        title="Xóa"
+                    a(
+                        href=`/admin/products-category/delete/${product.id}`
+                        class="btn btn-danger btn-sm me-1"
+                        title="Chỉnh sửa"
+                        onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');"
                     )
-                        i.fas.fa-trash Xóa
+                        i.fas.fa-edit Xóa
         if product.children && product.children.length > 0
             +tree(product.children, level + 1)

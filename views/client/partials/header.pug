@@ -23,8 +23,11 @@ header.header.bg-dark.sticky-top
 
             .col-lg-5.col-md-5.col-6
                 .d-flex.justify-content-end.align-items-center
+                    a.btn.btn-outline-light.me-2(href="/products")
+                        i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
+                        | Sản phẩm
                     if user
-                        a.btn.btn-outline-light.position-relative.me-3(href="/cart")
+                        a.btn.btn-outline-light.position-relative.me-2(href="/cart")
                             i.fas.fa-shopping-cart Giỏ hàng
                             if cart && cart.totalQuantity > 0
                                 span.position-absolute.top-0.start-100.translate-middle.badge.rounded-pill.bg-danger

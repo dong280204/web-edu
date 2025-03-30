@@ -41,7 +41,6 @@ module.exports.create=async (req, res) => {
         arr.forEach((item) => {
             if (item.parent_id === parentId) {
                 const newItem = item;
-                newItem.index=count
                 const children = createTree(arr, item.id);
                 if (children.length > 0) {
                     newItem.children = children;
@@ -70,5 +69,14 @@ module.exports.createPost=async (req, res) => {
     const productCategory=new ProductCategory(req.body)
     await productCategory.save()
     res.redirect('/admin/products-category')
+}
+// /admin/procuct-category/delete/:id post
+module.exports.deleteItem=async (req, res) => {
+    const id=req.params.id
+    await ProductCategory.updateOne({_id:id},{
+        deleted:true, 
+        deletedAt:new Date()
+    });
+    res.redirect('back')
 }
 

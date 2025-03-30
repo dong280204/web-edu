@@ -81,6 +81,12 @@ block main
                                         | Không hoạt động
                             td.text-center
                                 a(
+                                    href=`/admin/user/detail/${record.id}`
+                                    class="btn btn-info btn-sm me-1"
+                                    title="Chỉnh sửa"
+                                )
+                                    i.fas.fa-edit Chi tiết
+                                a(
                                     href=`/admin/user/edit/${record.id}`
                                     class="btn btn-warning btn-sm me-1"
                                     title="Chỉnh sửa"
@@ -90,6 +96,7 @@ block main
                                     href=`/admin/user/delete/${record.id}`
                                     class="btn btn-danger btn-sm me-1"
                                     title="Chỉnh sửa"
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');"
                                 )
                                     i.fas.fa-edit Xóa
 

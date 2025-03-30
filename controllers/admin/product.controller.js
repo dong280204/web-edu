@@ -1,3 +1,4 @@
+const ProductCategory = require("../../models/product_category.model");
 
 const Product = require("../../models/product.model");
 const filterStatusHelper = require("../../helpers/filterStatus");
@@ -70,9 +71,29 @@ module.exports.deleteItem=async (req, res) => {
 }
 
 // /admin/products/create get
-module.exports.create=(req, res) => {
+module.exports.create= async(req, res) => {
+    const find={
+            deleted:false
+        }
+        function createTree(arr, parentId = "") {
+            const tree = [];
+            arr.forEach((item) => {
+                if (item.parent_id === parentId) {
+                    const newItem = item;
+                    const children = createTree(arr, item.id);
+                    if (children.length > 0) {
+                        newItem.children = children;
+                    }
+                    tree.push(newItem);
+                }
+            });
+            return tree;
+        }
+        const productCategories = await ProductCategory.find(find)
+        const tree = createTree(productCategories)
     res.render('admin/pages/product/create',{
         pagaTitle: "Trang tao san pham"
+        ,productCategories:tree
     })
 }
 

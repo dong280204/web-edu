@@ -46,8 +46,8 @@ module.exports.add = async (req, res) => {
 module.exports.index= async(req, res) => {
     // const cartId = req.cookies.cartId;
     const user_id = req.cookies.tokenUser;
-    const cart = await Cart.findOne({user_id: user_id});
-
+    const cart = await Cart.findOne({user_id: user_id,status:'active'});
+    
     if(cart.product.length>0){
         for(const item of cart.product){
             const productInfo = await Product.findOne({_id: item.product_id});
@@ -60,6 +60,7 @@ module.exports.index= async(req, res) => {
         }
     }
     cart.totalPrice=cart.product.reduce((total, item) => total + item.totalPrice, 0);
+    cart.product = cart.product.filter(item => item.status === "active");
     res.render("client/pages/cart/index",{
         pageTitle :"GIỏ hàng",
         cart:cart,
@@ -104,4 +105,29 @@ module.exports.update = async (req, res) => {
     )
     req.flash("success", "Cập nhật giỏ hàng thành công");
     res.redirect("back");
+}
+
+// cart/history get
+module.exports.history = async (req, res) => {
+    // const cartId = req.cookies.cartId;
+    const user_id = req.cookies.tokenUser;
+    const cart = await Cart.findOne({user_id: user_id});
+
+    if(cart.product.length>0){
+        for(const item of cart.product){
+            const productInfo = await Product.findOne({_id: item.product_id});
+
+            productInfo.priceNew=(productInfo.price*(100-productInfo.discountPercentage)/100).toFixed(0)
+            item.totalPrice=item.quantity*productInfo.priceNew;
+
+
+            item.productInfo=productInfo;
+        }
+    }
+    cart.totalPrice=cart.product.reduce((total, item) => total + item.totalPrice, 0);
+    cart.product = cart.product.filter(item => item.status === "inactive");
+    res.render("client/pages/cart/history",{
+        pageTitle :"Lich sử giỏ hàng",
+        cart:cart,
+    })
 }

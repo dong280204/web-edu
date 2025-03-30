@@ -8,7 +8,7 @@ module.exports.index= async(req, res) => {
         deleted: false,
         featured: '1',
         status: 'active'
-    });
+    }).limit(6);
     //lay cac san pham moi nhat
     const newProducts = await Product.find({
         deleted:false,

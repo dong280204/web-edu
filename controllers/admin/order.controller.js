@@ -15,6 +15,7 @@ module.exports.index= async(req, res) => {
                 item2.totalPrice=item2.quantity*productInfo.priceNew;
                 item2.productInfo=productInfo
             }
+            item1.product = item1.product.filter(item => item.status === "active");
         }
     }
     // for(const item1 of cart){

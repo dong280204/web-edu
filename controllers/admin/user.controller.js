@@ -64,3 +64,12 @@ module.exports.deleteUser=async (req, res) => {
     });
     res.redirect('back')
 }
+
+// /admin/user/detail get
+module.exports.detail=async (req, res) => {
+    const user=await User.findOne({_id:req.params.id})
+    res.render('admin/pages/user/detail',{
+        pagaTitle: "Chi tiết người dùng",
+        user:user
+    })
+}
