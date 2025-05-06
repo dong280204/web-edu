@@ -1,80 +1,133 @@
 extends ../../layouts/default.pug
 include ../../mixin/tree.pug
 block main
-    .d-flex.justify-content-between.align-items-center.mb-4
-        h1.text-primary.mb-0
-            i.fas.fa-box.me-2
-            | Trang tạo danh mục
-    form(
-        action='/admin/products-category/create',
-        method='POST',
+    .card.shadow-sm.mb-4
+        .card-header.bg-white.py-3
+            .d-flex.justify-content-between.align-items-center
+                h5.card-title.mb-0
+                    i.fas.fa-folder-plus.me-2.text-primary
+                    | Tạo danh mục sản phẩm mới
+                a.btn.btn-outline-secondary.btn-sm(href="/admin/products-category")
+                    i.fas.fa-arrow-left.me-1
+                    | Quay lại danh sách
         
-    )
-        div(class='form-group')
-            label(for='title') Tiêu đề
-            input(
-                type='text',
-                class='form-control',
-                id='title',
-                name='title',
-                required
+        .card-body
+            form(
+                action='/admin/products-category/create',
+                method='POST',
+                class="needs-validation"
+                novalidate
             )
-    
-        div(class='form-group')
-            label(for='parent_id') Danh mục cha
-            select(name="parent_id" class="form-control" id="parent_id" )
-                option(value="") Chọn danh mục cha
-                if(productCategories)
-                    +tree(productCategories)              
-        div(class='form-group')
-            label(for='desc') Mô tả
-            textarea(
-                class='form-control',
-                id='desc',
-                name='description',
-                required
-            )
-        div(class='form-group')
-            label(for='thumbnail') Ảnh
-            input(
-                type='text',
-                class='form-control',
-                id='thumbnail',
-                name='thumbnail',
-                required
-            )
-        div(class='form-group')
-            label(for='position') Vị trí
-            input(
-                type='number',
-                class='form-control',
-                id='position',
-                name='position',
-                placeholder="Tự động tăng"
-                min='1'
-            )
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio",
-                class="form-check-input",
-                id="statusActive",
-                name="status",
-                value="active",
-                checked
-            )
-            label(for="statusActive" class="form-check-label") Hoạt động
-
-        div(class="form-group form-check form-check-inline")
-            input(
-                type="radio",
-                class="form-check-input",
-                id="statusInActive",
-                name="status",
-                value="inactive"
-            )
-            label(for="statusInActive" class="form-check-label") Không hoạt động
-        div(class='form-group')
-            button(
-                type='submit',
-                class='btn btn-primary'
-            ) Tạo danh mục
+                .row
+                    .col-md-8
+                        .card.shadow-sm.mb-4
+                            .card-header.bg-white
+                                h6.card-subtitle.mb-0
+                                    i.fas.fa-info-circle.me-2
+                                    | Thông tin cơ bản
+                            .card-body
+                                .row.g-3
+                                    .col-md-12.mb-3
+                                        label.form-label.fw-medium(for='title')
+                                            | Tiêu đề
+                                            span.text-danger *
+                                        input.form-control(
+                                            type='text',
+                                            id='title',
+                                            name='title',
+                                            required
+                                            placeholder="Nhập tiêu đề danh mục"
+                                        )
+                                        .invalid-feedback Vui lòng nhập tiêu đề danh mục
+                                    
+                                    .col-md-12.mb-3
+                                        label.form-label.fw-medium(for='parent_id') Danh mục cha
+                                        select.form-select(
+                                            name="parent_id" 
+                                            id="parent_id"
+                                        )
+                                            option(value="") Chọn danh mục cha
+                                            if(productCategories)
+                                                +tree(productCategories)
+                                
+                                    .col-md-12.mb-3
+                                        label.form-label.fw-medium(for='desc')
+                                            | Mô tả
+                                            span.text-danger *
+                                        textarea.form-control(
+                                            id='desc',
+                                            name='description',
+                                            required
+                                            rows="5"
+                                            placeholder="Nhập mô tả chi tiết về danh mục"
+                                        )
+                                        .invalid-feedback Vui lòng nhập mô tả danh mục
+                    
+                    .col-md-4
+                        .card.shadow-sm.mb-4
+                            .card-header.bg-white
+                                h6.card-subtitle.mb-0
+                                    i.fas.fa-cog.me-2
+                                    | Tùy chọn
+                            .card-body
+                                .mb-3
+                                    label.form-label.fw-medium(for='thumbnail')
+                                        | Ảnh đại diện
+                                        span.text-danger *
+                                    .input-group.mb-1
+                                        input.form-control(
+                                            type='text',
+                                            id='thumbnail',
+                                            name='thumbnail',
+                                            required
+                                            placeholder="Nhập URL hình ảnh"
+                                        )
+                                        button.btn.btn-outline-secondary(type="button")
+                                            i.fas.fa-image
+                                    .form-text.small.text-muted Nhập URL của hình ảnh hoặc chọn file từ thư viện
+                                
+                                .mb-3
+                                    label.form-label.fw-medium(for='position') Vị trí hiển thị
+                                    input.form-control(
+                                        type='number',
+                                        id='position',
+                                        name='position',
+                                        placeholder="Tự động tăng"
+                                        min='1'
+                                    )
+                                    .form-text.small.text-muted Để trống để tự động sắp xếp
+                                
+                                .mb-3
+                                    label.form-label.fw-medium Trạng thái
+                                    .d-flex
+                                        .form-check.me-3
+                                            input.form-check-input(
+                                                type="radio",
+                                                id="statusActive",
+                                                name="status",
+                                                value="active",
+                                                checked
+                                            )
+                                            label.form-check-label(for="statusActive") 
+                                                span.badge.bg-success Hoạt động
+                                        
+                                        .form-check
+                                            input.form-check-input(
+                                                type="radio",
+                                                id="statusInActive",
+                                                name="status",
+                                                value="inactive"
+                                            )
+                                            label.form-check-label(for="statusInActive")
+                                                span.badge.bg-secondary Không hoạt động
+                        
+                        .card.shadow-sm
+                            .card-body
+                                .d-grid.gap-2
+                                    button.btn.btn-primary(type='submit')
+                                        i.fas.fa-save.me-2
+                                        | Tạo danh mục
+                                    
+                                    button.btn.btn-outline-secondary(type='reset')
+                                        i.fas.fa-undo.me-2
+                                        | Làm mới

@@ -3,22 +3,30 @@ include ../../mixin/search.pug
 include ../../mixin/pagination.pug
 
 block main
-   
+    if(messages.success)
+        .alert.alert-success.alert-dismissible.fade.show.mb-4
+            i.fas.fa-check-circle.me-2
+            | #{messages.success}
+            button(type="button" class="btn-close" data-bs-dismiss="alert")
+
     .d-flex.justify-content-between.align-items-center.mb-4
         h1.text-primary.mb-0
-            i.fas.fa-users.me-2
-            | Danh sách đơn hàng 
+            i.fas.fa-shopping-bag.me-2
+            | Danh sách đơn hàng
+        
+            
     .card.shadow-sm.mb-4
         .card-header.bg-white.py-3
             .row.align-items-center
                 .col-md-8
-                    form#form-search.d-flex
+                    form#form-search.d-flex(action="/admin/order/search" method="GET")
                         .input-group
                             input(
                                 type="text"
-                                placeholder="Tìm kiếm người đặt..."
+                                placeholder="Tìm kiếm theo tên khách hàn"
                                 name="keyword"
                                 class="form-control"
+                                value=keyword || ""
                             )
                             button(type="submit" class="btn btn-primary")
                                 i.fas.fa-search.me-1
@@ -30,71 +38,86 @@ block main
                 thead.bg-light
                     tr
                         th.text-center(width="5%") STT
-                        th.text-center(width="15%") Tên sản phẩm
-                        th(width="15%") Người đặt
-                        th(width="25%") Email
-                        th.text-center(width="10%") Số lượng
-                        th.text-center(width="15%") Giá
-
-                        th.text-center(width="15%") Thao tác
+                        th(width="15%") Khách hàng
+                        th(width="15%") Liên hệ
+                        th(width="20%") Địa chỉ giao hàng
+                        th.text-center(width="10%") Tổng tiền
+                        th.text-center(width="15%") Trạng thái
+                        th.text-center(width="20%") Thao tác
                 tbody
-                    -var index = 1
-                    each record in cart
-                        each product in record.product   
+                    if order && order.length > 0
+                        each item, index in order 
                             tr
-                                td.text-center #{index++}
-                                td.text-center #{product.productInfo.title}
-                                td.fw-bold #{record.userInfor.fullName}
-                                td.fw-bold #{record.userInfor.email}
-                                td.text-center #{product.quantity}
-                                td.text-center #{product.totalPrice}
+                                td.text-center #{index + 1}
+                                td
+                                    .fw-bold #{item.userInfo.fullName}
+                                    small.text-muted ID: #{item._id ? item._id.toString().slice(-6) : 'N/A'}
+                                td
+                                    .d-flex.align-items-center
+                                        i.fas.fa-phone.text-primary.me-2
+                                        span #{item.userInfo.phone}
+                                td
+                                    .text-truncate(style="max-width: 200px;" title=item.userInfo.address)
+                                        i.fas.fa-map-marker-alt.text-danger.me-2
+                                        | #{item.userInfo.address}
+                                td.text-center
+                                    span.badge.bg-light.text-dark.border.fw-normal.p-2
+                                        | $#{Number(item.totalPrice).toLocaleString()}
+                                
+                                td.text-center
+                                    if(item.status == "ongoing")
+                                        button(
+                                            class="badge bg-warning border-0"
+                                            button-change-status 
+                                            data-status="ongoing"
+                                            data-id=item.id
+                                        )
+                                            i.fas.fa-clock.me-1
+                                            | Đang xử lý
+                                    else 
+                                        button(
+                                            class="badge bg-success border-0"
+                                            button-change-status
+                                            data-status="finished"
+                                            data-id=item.id
+                                        )
+                                            i.fas.fa-check-circle.me-1
+                                            | Đã xử lý
                                 td.text-center
                                     a(
-                                        href=`/admin/user/edit/${record.id}`
+                                        href=`/admin/order/detail/${item.id}`
+                                        class="btn btn-info btn-sm me-1"
+                                        title="Xem chi tiết"
+                                    )
+                                        i.fas.fa-eye.me-1
+                                        | Chi tiết
+                                    a(
+                                        href=`/admin/order/edit/${item.id}`
                                         class="btn btn-warning btn-sm me-1"
                                         title="Chỉnh sửa"
                                     )
-                                        i.fas.fa-edit Sửa
+                                        i.fas.fa-edit.me-1
+                                        | Sửa
                                     a(
-                                        href=`/admin/user/delete/${record.id}`
-                                        class="btn btn-danger btn-sm me-1"
-                                        title="Chỉnh sửa"
+                                        href=`/admin/order/delete/${item.id}`
+                                        class="btn btn-danger btn-sm"
+                                        title="Xóa đơn hàng"
+                                        onclick="return confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?');"
                                     )
-                                        i.fas.fa-edit Xóa
-                                    a(
-                                        href=`/admin/products/detail/${product.id}`
-                                        class="btn btn-info btn-sm"
-                                        title="Chi tiết"
-                                    )
-                                        i.fas.fa-eye Chi tiết
+                                        i.fas.fa-trash-alt.me-1
+                                        | Xóa
+                    else
+                        tr
+                            td.text-center.py-5(colspan="7")
+                                .text-center
+                                    i.fas.fa-shopping-cart.fa-3x.text-muted.mb-3
+                                    h5.text-muted Không có đơn hàng nào
+                                    p.text-muted.small Các đơn hàng mới sẽ xuất hiện ở đây
+
         .card-footer.bg-white
             .row.align-items-center
                 .col-md-6.text-muted
-                    | Hiển thị #{4} / #{12} Đơn hàng
+                    | Hiển thị #{pagination ? pagination.limitItems : 0} / #{pagination ? pagination.totalItems : 0} đơn hàng
                 .col-md-6
-                    nav
-                        ul.pagination
-                            li.page-item
-                                button(
-                                    class="page-link"
-                                ) Trang truoc
-                            li.page-item
-                                button(
-                                    class="page-link active"
-                                ) 1
-                            li.page-item
-                                button(
-                                    class="page-link"
-                                ) 2
-                            li.page-item
-                                button(
-                                    class="page-link"
-                                ) 3
-                            li.page-item
-                                button(
-                                    class="page-link"
-                                ) 4
-                            li.page-item
-                                button(
-                                    class="page-link"
-                                ) Ke tiep 
+                    +pagination(pagination)
+

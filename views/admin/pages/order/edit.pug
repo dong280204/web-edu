@@ -1,0 +1,89 @@
+extends ../../layouts/default.pug
+block main
+    .container.py-4
+        // Header
+        .d-flex.justify-content-between.align-items-center.mb-4
+            h1.text-primary.mb-0
+                i.fas.fa-edit.me-2
+                | Chỉnh sửa đơn hàng
+            a.btn.btn-outline-secondary(href="/admin/order")
+                i.fas.fa-arrow-left.me-2
+                | Quay lại
+
+        .row
+            .col-lg-8.mx-auto
+                .card.shadow-sm.border-0
+                    .card-header.bg-white.py-3
+                        h5.card-title.mb-0
+                            i.fas.fa-pen-to-square.text-primary.me-2
+                            | Thông tin đơn hàng ##{order._id.toString().slice(-6)}
+                    
+                    .card-body.p-4
+                        form(action=`/admin/order/edit/${order._id}?_method=PATCH`
+                            method="POST"
+                            class="needs-validation"
+                            novalidate
+                            )
+                            
+                            // Trạng thái đơn hàng
+                            .mb-4
+                                label.form-label.fw-semibold Trạng thái đơn hàng
+                                select.form-select(name="status")
+                                    option(value="ongoing" selected=order.status === "ongoing") Đang xử lý
+                                    option(value="finished" selected=order.status === "finished") Đã xử lý
+                            
+                            hr.my-4
+                            
+                            // Thông tin khách hàng
+                            h6.mb-3.text-primary
+                                i.fas.fa-user.me-2
+                                | Thông tin khách hàng
+                            
+                            .mb-3
+                                label.form-label Họ và tên
+                                input.form-control(
+                                    type="text"
+                                    name="fullName"
+                                    value=order.userInfo.fullName
+                                    required
+                                )
+                            
+                            .mb-3
+                                label.form-label Số điện thoại
+                                input.form-control(
+                                    type="tel"
+                                    name="phone"
+                                    value=order.userInfo.phone
+                                    pattern="[0-9]{10}"
+                                    required
+                                )
+                                .form-text Nhập số điện thoại 10 chữ số
+                            
+                            .mb-4
+                                label.form-label Địa chỉ
+                                textarea.form-control(
+                                    name="address"
+                                    rows="3"
+                                    required
+                                ) #{order.userInfo.address}
+                            
+                            hr.my-4
+                            
+                            // Tóm tắt đơn hàng
+                            .d-flex.justify-content-between.mb-3
+                                span Tổng số sản phẩm:
+                                span.fw-bold #{order.products.length} sản phẩm
+                            
+                            .d-flex.justify-content-between.mb-3
+                                span Tổng tiền:
+                                span.fw-bold.text-danger $#{Number(order.totalPrice).toLocaleString()}
+                            
+                            // Nút lưu và hủy
+                            .d-flex.justify-content-end.gap-2.mt-4
+                                a.btn.btn-light(href=`/admin/order/detail/${order._id}`)
+                                    i.fas.fa-times.me-2
+                                    | Hủy
+                                button.btn.btn-primary(type="submit")
+                                    i.fas.fa-save.me-2
+                                    | Lưu thay đổi
+

@@ -1,6 +1,5 @@
 mixin tree(productCategories, level = 1)
     each product in productCategories
-        - const prefix = Array(level + 1).join("-- ")
         tr
             td.text-center #{product.index}
             td
@@ -53,5 +52,4 @@ mixin tree(productCategories, level = 1)
                         onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này không?');"
                     )
                         i.fas.fa-edit Xóa
-        if product.children && product.children.length > 0
-            +tree(product.children, level + 1)
+        

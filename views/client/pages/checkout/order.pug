@@ -1,0 +1,137 @@
+extends ../../layouts/default.pug
+block main
+    .container.py-5
+        // Thanh thông báo thành công
+        .row.mb-5
+            .col-12
+                .card.border-0.shadow-sm.bg-success.text-white
+                    .card-body.text-center.py-5
+                        i.fas.fa-check-circle.fa-5x.mb-3
+                        h2.fw-bold Đặt hàng thành công!
+                        p.mb-0.lead Cảm ơn bạn đã mua hàng. Chúng tôi sẽ xử lý đơn hàng của bạn trong thời gian sớm nhất.
+                        p.mb-4.mt-2 Mã đơn hàng: ##{order._id}
+                        a.btn.btn-light.btn-lg(href="/")
+                            i.fas.fa-arrow-left.me-2
+                            | Tiếp tục mua sắm
+        
+        .row
+            .col-lg-8
+                // Thông tin đơn hàng
+                .card.shadow-sm.mb-4
+                    .card-header.bg-white.py-3
+                        h5.card-title.mb-0
+                            i.fas.fa-shopping-bag.me-2.text-primary
+                            | Chi tiết đơn hàng
+                    .card-body
+                        // Danh sách sản phẩm
+                        .table-responsive
+                            table.table.table-borderless
+                                thead.table-light
+                                    tr
+                                        th.text-muted Sản phẩm
+                                        th.text-center.text-muted Số lượng
+                                        th.text-end.text-muted Thành tiền
+                                tbody
+                                    each product in order.products
+                                        tr
+                                            td
+                                                .d-flex.align-items-center
+                                                    if product.productInfo && product.productInfo.thumbnail
+                                                        img.rounded.me-3(
+                                                            src=product.productInfo.thumbnail
+                                                            alt=product.productInfo.title || "Sản phẩm"
+                                                            style="width: 50px; height: 50px; object-fit: cover"
+                                                        )
+                                                    div
+                                                        h6.mb-0 #{product.productInfo ? product.productInfo.title : `Sản phẩm ${product.product_id}`}
+                                                        if product.productInfo && product.productInfo.priceNew
+                                                            small.text-muted $#{product.productInfo.priceNew}
+                                            td.text-center.align-middle #{product.quantity}
+                                            td.text-end.align-middle.fw-bold $#{product.productInfo ? (product.productInfo.priceNew * product.quantity).toFixed(2) : 'N/A'}
+                        
+                        hr.my-4
+                        
+                        // Tổng cộng
+                        .row.mb-2
+                            .col-7.col-md-9.text-end Tạm tính:</strong>
+                            .col-5.col-md-3.text-end $#{order.totalPrice}
+                        .row.mb-2
+                            .col-7.col-md-9.text-end Phí vận chuyển:
+                            .col-5.col-md-3.text-end
+                                span.text-success Miễn phí
+                        .row.mb-2
+                            .col-7.col-md-9.text-end.fw-bold.fs-5 Tổng cộng:
+                            .col-5.col-md-3.text-end.fw-bold.fs-5.text-danger $#{order.totalPrice}
+                    
+                    .card-footer.bg-white.py-3
+                        .d-flex.justify-content-between.align-items-center
+                            div
+                                small.text-muted Ngày đặt hàng:
+                                .fw-medium #{new Date(order.createdAt).toLocaleDateString('vi-VN')}
+                            div
+                                span.badge.bg-warning.p-2
+                                    i.fas.fa-clock.me-1
+                                    | Đang xử lý
+            
+            .col-lg-4
+                // Thông tin người nhận
+                .card.shadow-sm.mb-4
+                    .card-header.bg-white.py-3
+                        h5.card-title.mb-0
+                            i.fas.fa-user-circle.me-2.text-primary
+                            | Thông tin người nhận
+                    .card-body
+                        ul.list-unstyled.mb-0
+                            li.mb-3
+                                .d-flex.align-items-center
+                                    i.fas.fa-user.text-primary.me-3
+                                    div
+                                        .text-muted.small Họ và tên
+                                        .fw-medium #{order.userInfo.fullName}
+                            li.mb-3
+                                .d-flex.align-items-center
+                                    i.fas.fa-phone.text-primary.me-3
+                                    div
+                                        .text-muted.small Số điện thoại
+                                        .fw-medium #{order.userInfo.phone}
+                            li
+                                .d-flex.align-items-center
+                                    i.fas.fa-map-marker-alt.text-primary.me-3
+                                    div
+                                        .text-muted.small Địa chỉ giao hàng
+                                        .fw-medium #{order.userInfo.address}
+                
+                // Hướng dẫn
+                .card.shadow-sm.mb-4
+                    .card-header.bg-white.py-3
+                        h5.card-title.mb-0
+                            i.fas.fa-info-circle.me-2.text-primary
+                            | Thông tin thanh toán
+                    .card-body
+                        .alert.alert-light.mb-0
+                            p.mb-2
+                                i.fas.fa-money-bill.text-success.me-2
+                                strong Phương thức thanh toán:
+                                |  Chuyển khoản ngân hàng
+                            
+                            p.mb-3
+                                i.fas.fa-shipping-fast.text-info.me-2
+                                strong Thời gian giao hàng:
+                                |  3-5 ngày làm việc
+                            
+                            hr.my-3
+                            
+                            p.mb-0
+                                | Nếu bạn có bất kỳ thắc mắc nào về đơn hàng, vui lòng 
+                                a(href="/contact") liên hệ với chúng tôi
+                                |  hoặc gọi số hotline 
+                                strong 1800-1234
+
+                // Tiện ích
+                .d-grid.gap-3
+                    a.btn.btn-outline-primary(href="/cart/history")
+                        i.fas.fa-list-ul.me-2
+                        | Xem lịch sử đơn hàng
+                    a.btn.btn-outline-secondary(href="/")
+                        i.fas.fa-home.me-2
+                        | Quay lại trang chủ

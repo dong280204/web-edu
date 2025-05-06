@@ -1,31 +1,71 @@
 const Product = require("../../models/product.model");
-const Cart = require("../../models/cart.model");
+const Order = require("../../models/order.model");
 const User = require("../../models/user.model")
-
+const searchHelper= require("../../helpers/search");
+const paginationHelper = require("../../helpers/pagination");
 // /order get
 module.exports.index= async(req, res) => {
-    const cart = await Cart.find({status: 'active'});
-    for(const item1 of cart){
-        if(item1.product.length>0){
-            const userInfor = await User.findOne({tokenUser: item1.user_id});
-            item1.userInfor=userInfor
-            for(const item2 of item1.product){
-                const productInfo = await Product.findOne({_id: item2.product_id});
-                productInfo.priceNew=(productInfo.price*(100-productInfo.discountPercentage)/100).toFixed(0)
-                item2.totalPrice=item2.quantity*productInfo.priceNew;
-                item2.productInfo=productInfo
-            }
-            item1.product = item1.product.filter(item => item.status === "active");
-        }
+    let find ={
     }
-    // for(const item1 of cart){
-    //     console.log(item1.userInfor.fullName)
-    //     for(const item2 of item1.product){
-    //         console.log(item2.productInfo.title,item2.quantity,item2.totalPrice)
-    //     }
-    // }
+    //Goi ham paginationHelper
+    const count = await User.countDocuments(find)
+    const objectPagination = paginationHelper(req,count,4)
+    //end Goi ham paginationHelper
+    //Gọi hàm searchHelper
+    const search = searchHelper(req)
+    if(search.regex){
+        find["userInfo.fullName"] = search.regex;
+    }
+    //End Gọi hàm searchHelper
+    const order = await Order.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip)
     res.render('admin/pages/order/index',{
         pagaTitle: "Trang quản lý giỏ hàng",
-        cart: cart
+        keyword:search.keyword,
+        order: order,
+        pagination: objectPagination
     })
+}
+module.exports.detail= async(req, res) => {
+    const id=req.params.id;
+    const order = await Order.findOne({_id:id})
+    for(const item of order.products){
+        const product = await Product.findOne({_id: item.product_id});
+        item.productInfo=product;
+    }
+    res.render('admin/pages/order/detail',{
+        pagaTitle: "Chi tiết đơn hàng",
+        order: order
+    })
+}
+module.exports.delete= async(req, res) => {
+    const id=req.params.id;
+    await Order.deleteOne({_id:id})
+    res.redirect('back')
+}
+module.exports.edit= async(req, res) => {
+    const id=req.params.id;
+    const order = await Order.findOne({_id:id})
+    
+    res.render('admin/pages/order/edit',{
+        pagaTitle: "Sửa đơn hàng",
+        order: order
+    })
+}
+module.exports.editPatch = async(req, res) => {
+    const id = req.params.id;
+    
+    await Order.updateOne(
+        { _id: id },
+        {
+            $set: {
+                status: req.body.status,
+                'userInfo.fullName': req.body.fullName,
+                'userInfo.phone': req.body.phone,
+                'userInfo.address': req.body.address
+            }
+        }
+    );
+    
+    // req.flash('success', 'Cập nhật đơn hàng thành công!');
+    res.redirect(`/admin/order`);
 }

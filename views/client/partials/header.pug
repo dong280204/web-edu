@@ -1,10 +1,6 @@
-//- sticky-top: khi cuộn xuống dưới thì header sẽ dính ở trên cùng của trình duyệt
-//-position-relative: cho phần tử con sử dụng position: relative
-//-position-absolute: cho phần tử con sử dụng position: absolute
-//-rounded-pill: bo tròn góc
 header.header.bg-dark.sticky-top
-    .container
-        .row.align-items-center.py-3
+    .container.h-100
+        .row.align-items-center.h-100
             .col-lg-2.col-md-3.col-6
                 .logo
                     a(href="/")
@@ -19,30 +15,30 @@ header.header.bg-dark.sticky-top
                             value=keyword
                         )
                         button.btn.btn-light(type="submit")
-                            i.fas.fa-search Tìm kiếm
+                            i.fas.fa-search 
 
             .col-lg-5.col-md-5.col-6
                 .d-flex.justify-content-end.align-items-center
-                    a.btn.btn-outline-light.me-2(href="/products")
+                    a.btn.btn-outline-light.btn-sm.me-2(href="/products")
                         i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
                         | Sản phẩm
                     if user
-                        a.btn.btn-outline-light.me-2(href="/cart")
+                        a.btn.btn-outline-light.btn-sm.me-2(href="/cart")
                                 i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
                                 | Gỉỏ hàng
                         .d-flex
-                            a.btn.btn-outline-light.me-2(href="/user/info")
+                            a.btn.btn-outline-light.btn-sm.me-2(href="/user/info")
                                 i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
                                 | #{user.fullName}
-                            a.btn.btn-light(href="/user/logout")
+                            a.btn.btn-light.btn-sm(href="/user/logout")
                                 i.fas.fa-user-plus.me-2.d-none.d-md-inline
                                 | Đăng Xuất
                     else
                         .d-flex
-                            a.btn.btn-outline-light.me-2(href="/user/login")
+                            a.btn.btn-outline-light.btn-sm.me-2(href="/user/login")
                                 i.fas.fa-sign-in-alt.me-2.d-none.d-md-inline
                                 | Đăng nhập
-                            a.btn.btn-light(href="/user/register")
+                            a.btn.btn-light.btn-sm(href="/user/register")
                                 i.fas.fa-user-plus.me-2.d-none.d-md-inline
                                 | Đăng ký
 
@@ -51,9 +47,23 @@ block append style
         .header {
             background-color: #404040;  /* Màu đen nhạt hơn */
             box-shadow: 0 2px 4px rgba(84, 59, 59, 0.99);
+            height: 70px; /* Cố định chiều cao header */
+        }
+        .header .container {
+            height: 100%;
+        }
+        .header .row {
+            height: 100%;
+        }
+        .logo, .search-form, .d-flex {
+            display: flex;
+            align-items: center;
+            height: 100%;
         }
         .header .btn {
             transition: all 0.3s;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
         }
         .header .btn:hover {
             transform: translateY(-2px);
